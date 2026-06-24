@@ -1,0 +1,33 @@
+/* ═══════════════════════════════════════════════════════════════
+   STECCA POS — App Layout Styles
+   ═══════════════════════════════════════════════════════════════ */
+
+.header-branch-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.header-branch-pill:hover {
+  border-color: var(--brand-500);
+  background: var(--surface-elevated);
+}
+
+.header-search {
+  width: 260px;
+}
+
+@media (max-width: 1024px) {
+  .header-search {
+    display: none;
+  }
+}

@@ -1,0 +1,174 @@
+/* Stock Management Layout Styles */
+.stock-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.stock-stat-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+}
+
+.stock-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stock-stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+}
+
+.stock-stat-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.stock-stat-sub {
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+.stock-stat-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Tab Navigation */
+.stock-tabs-nav {
+  display: flex;
+  padding: var(--space-2);
+  gap: var(--space-1);
+}
+
+.stock-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 650;
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.stock-tab-btn:hover {
+  background: var(--surface-default);
+  color: var(--text-primary);
+}
+
+.stock-tab-btn.active {
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--brand-400);
+}
+
+/* Tab Content */
+.stock-tab-content {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.filter-dropdown-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--surface-default);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-lg);
+  padding: 0 var(--space-3);
+  height: var(--input-height);
+}
+
+.filter-icon {
+  color: var(--text-tertiary);
+}
+
+.filter-dropdown-wrapper select {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  height: 100%;
+}
+
+.empty-content-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-5);
+  text-align: center;
+  min-height: 250px;
+}
+
+.empty-content-tab .empty-icon {
+  color: var(--gray-700);
+  margin-bottom: var(--space-3);
+}
+
+.empty-content-tab h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+/* Opname Modal Helpers */
+.opname-details-card {
+  background: var(--surface-default);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.opname-detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.opname-selisih-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid var(--brand-500);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  margin-bottom: var(--space-4);
+}

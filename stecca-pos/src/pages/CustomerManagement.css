@@ -1,0 +1,151 @@
+/* CRM Customer Management CSS */
+.crm-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.crm-stat-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+}
+
+.gold-glow {
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.05);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.crm-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.crm-stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+}
+
+.crm-stat-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.crm-stat-sub {
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+.crm-stat-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.crm-filter-bar {
+  padding: var(--space-4) var(--space-5);
+}
+
+.crm-table-card {
+  padding: var(--space-4) 0 0 0;
+  overflow: hidden;
+}
+
+.customer-avatar-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.customer-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: #000;
+  font-size: 0.78rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.customer-name-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-id {
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  font-family: monospace;
+  margin-top: 1px;
+}
+
+/* Custom Tier Badges */
+.tier-badge-gold {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.18), rgba(217, 119, 6, 0.18));
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.tier-badge-silver {
+  background: linear-gradient(135deg, rgba(156, 163, 175, 0.18), rgba(107, 114, 128, 0.18));
+  color: var(--gray-300);
+  border: 1px solid rgba(156, 163, 175, 0.25);
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.tier-badge-regular {
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-muted);
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.crm-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  margin: 0 auto;
+  transition: all var(--transition-fast);
+}
+
+.crm-action-btn:hover {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+}

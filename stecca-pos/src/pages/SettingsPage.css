@@ -1,0 +1,170 @@
+/* Settings Configuration Styles */
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.template-grid {
+  gap: var(--space-5);
+  margin-top: var(--space-2);
+}
+
+.template-card-item {
+  position: relative;
+  cursor: pointer;
+  padding: var(--space-5);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+}
+
+.template-card-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-default);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Glowing selector borders for active template */
+.selected-glow-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.04);
+}
+
+.template-card-item.selected {
+  background: rgba(255, 255, 255, 0.01);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.tpl-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding: 0;
+}
+
+.tpl-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+}
+
+.tpl-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tpl-title {
+  font-size: 1rem;
+  font-weight: 750;
+  color: var(--text-primary);
+}
+
+.tpl-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tpl-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.tpl-features-list {
+  border-top: 1px dashed var(--border-default);
+  padding-top: var(--space-4);
+}
+
+.features-header-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-2);
+}
+
+.tpl-features-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tpl-features-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.feature-check-icon {
+  flex-shrink: 0;
+}
+
+/* Dynamic success notification toast */
+.settings-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface-overlay);
+  border: 1px solid var(--success-500);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.toast-icon {
+  color: var(--success-400);
+}
+
+/* Cloud Information Card */
+.cloud-status-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  margin-top: var(--space-2);
+  border: 1px solid var(--border-default);
+  background: rgba(255, 255, 255, 0.005);
+}
+
+.cloud-icon {
+  color: var(--brand-400);
+  flex-shrink: 0;
+}
+
+.cloud-info-content h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.cloud-info-content p {
+  line-height: 1.5;
+}

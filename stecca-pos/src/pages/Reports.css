@@ -1,0 +1,151 @@
+/* Reports & Analytics CSS */
+.reports-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Range Selector Dropdown Simulator */
+.range-selector-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  background: var(--surface-default);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-lg);
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--text-primary);
+  height: var(--input-height);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.range-selector-dropdown:hover {
+  border-color: var(--border-default);
+}
+
+.dropdown-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: var(--surface-overlay);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-md);
+  min-width: 130px;
+  z-index: 10;
+  padding: 4px 0;
+}
+
+.range-selector-dropdown:hover .dropdown-options {
+  display: block;
+}
+
+.dropdown-option {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.dropdown-option:hover {
+  background: var(--surface-default);
+  color: var(--text-primary);
+}
+
+.dropdown-option.selected {
+  color: var(--brand-400);
+  font-weight: 700;
+}
+
+/* Reports Tiles */
+.reports-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.report-tile-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-fast) ease-out;
+}
+
+.report-tile-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--brand-400);
+  background: var(--surface-elevated);
+}
+
+.tile-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+}
+
+.tile-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tile-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tile-desc {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+.tile-arrow-hover {
+  opacity: 0;
+  transform: translateX(-4px);
+  color: var(--brand-400);
+  transition: all var(--transition-normal);
+}
+
+.report-tile-card:hover .tile-arrow-hover {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Weekly Summary */
+.weekly-summary-card {
+  padding: var(--space-5);
+}
+
+.weekly-summary-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+@media (max-width: 1024px) {
+  .reports-tiles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .reports-tiles-grid {
+    grid-template-columns: 1fr;
+  }
+}
