@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Plus, Edit, Trash2, Globe, Eye, Save, Layout, 
-  ExternalLink, Lock, Unlock, Settings, Check, Sparkles, AlertCircle
+  Plus, Edit, Trash2, Globe, Save, Layout, 
+  ExternalLink, Lock, Unlock, Check, Sparkles, AlertCircle
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import './CMSManager.css';

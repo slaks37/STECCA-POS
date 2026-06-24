@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Mail, Phone, CalendarRange, Plus, Edit2, ShieldAlert, Award, Clock, Upload, X } from 'lucide-react';
+import { Users, Mail, Phone, CalendarRange, Plus, Edit2, Award, Clock, Upload, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { formatRupiah } from '../data/mockData';
 import './EmployeeManagement.css';

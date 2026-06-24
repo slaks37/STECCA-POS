@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { 
-  Calendar, MapPin, Users, Ticket, Plus, Search, Check, 
-  CheckCircle2, XCircle, UserPlus, ArrowRight, Clock, QrCode, 
-  Printer, Download, AlertCircle, TrendingUp, Upload, X
+  Calendar, MapPin, Ticket, Plus, Search, Check, 
+  UserPlus, ArrowRight, Clock, QrCode, 
+  Printer, AlertCircle, TrendingUp, Upload, X
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import './EventManagement.css';

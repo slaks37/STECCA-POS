@@ -3,8 +3,6 @@ import {
   Search,
   Plus,
   Upload,
-  Package,
-  Layers,
   Edit,
   MoreHorizontal,
   CheckCircle2,
@@ -52,7 +50,7 @@ export default function ProductManagement() {
 
       return matchesSearch && matchesCategory && matchesType && matchesStatus;
     });
-  }, [searchQuery, categoryFilter, typeFilter, statusFilter]);
+  }, [searchQuery, categoryFilter, typeFilter, statusFilter, products]);
 
   // Margin styling calculator
   const getMarginClass = (margin) => {

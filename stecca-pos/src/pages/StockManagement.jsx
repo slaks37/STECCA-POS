@@ -8,7 +8,6 @@ import {
   ArrowRightLeft,
   ClipboardCheck,
   Calendar,
-  Truck,
   RotateCcw,
   X
 } from 'lucide-react';
@@ -55,7 +54,7 @@ export default function StockManagement() {
       const matchesCategory = categoryFilter === 'Semua' || item.category === categoryFilter;
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, categoryFilter]);
+  }, [searchQuery, categoryFilter, stockItems]);
 
   // Handle Opname Submission
   const handleOpnameSubmit = async (e) => {

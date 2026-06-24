@@ -10,9 +10,7 @@ import {
   CheckCircle,
   Play,
   XCircle,
-  ChevronDown,
   Briefcase,
-  AlertCircle,
   Tag,
   DollarSign,
   Search
@@ -22,7 +20,7 @@ import { formatRupiah } from '../data/mockData';
 import './Bookings.css';
 
 export default function Bookings() {
-  const { bookings, addBooking, updateBookingStatus, customers } = useApp();
+  const { bookings, addBooking, updateBookingStatus } = useApp();
   const navigate = useNavigate();
 
   // Filters state

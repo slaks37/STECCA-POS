@@ -49,7 +49,7 @@ export default function CustomerManagement() {
              c.phone.includes(searchQuery) ||
              c.email.toLowerCase().includes(searchQuery.toLowerCase());
     });
-  }, [searchQuery]);
+  }, [searchQuery, customers]);
 
   // Initial avatar generator helper
   const getInitials = (name) => {

@@ -9,7 +9,6 @@ import {
   QrCode,
   Banknote,
   Wallet,
-  X,
   ShoppingCart,
   Printer,
   CheckCircle
@@ -167,7 +166,7 @@ export default function POSCashier() {
                             p.sku.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch && p.active;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, products]);
 
   // Cart Handlers
   const addToCart = (product) => {
