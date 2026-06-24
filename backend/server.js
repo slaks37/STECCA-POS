@@ -8,7 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(morgan('dev'));
 
 // Helper to extract business name from headers
@@ -68,10 +69,10 @@ async function triggerSheetsSync(businessName) {
 
     // Sync all tabs
     await googleSync.syncTableToSheet(spreadsheetId, 'Dashboard', dashboardRows, ['Metric', 'Value']);
-    await googleSync.syncTableToSheet(spreadsheetId, 'Products', productsData, ['ID', 'SKU', 'Name', 'Category', 'Price', 'Cost', 'Stock', 'Type', 'Active']);
+    await googleSync.syncTableToSheet(spreadsheetId, 'Products', productsData, ['ID', 'SKU', 'Name', 'Category', 'Price', 'Cost', 'Stock', 'Type', 'Active', 'Image']);
     await googleSync.syncTableToSheet(spreadsheetId, 'Inventory', stockItemsData, ['ID', 'SKU', 'Name', 'Category', 'Stock', 'Safety Stock', 'Unit', 'Cost', 'Last Opname', 'Status']);
     await googleSync.syncTableToSheet(spreadsheetId, 'Stock Mutations', stockMutationsData, ['ID', 'Date', 'Product', 'Type', 'From', 'To', 'Qty', 'Unit', 'Status']);
-    await googleSync.syncTableToSheet(spreadsheetId, 'Customers', customersData, ['ID', 'Name', 'Phone', 'Email', 'Tier', 'Points', 'Total Spent', 'Visits']);
+    await googleSync.syncTableToSheet(spreadsheetId, 'Customers', customersData, ['ID', 'Name', 'Phone', 'Email', 'Tier', 'Points', 'Total Spent', 'Visits', 'Image']);
     await googleSync.syncTableToSheet(spreadsheetId, 'Bookings', bookingsData, ['ID', 'Customer Name', 'Phone', 'Service Name', 'Time', 'Date', 'Status', 'Staff', 'Price', 'Industry']);
     await googleSync.syncTableToSheet(spreadsheetId, 'Transactions', transactionsData, ['ID', 'Time', 'Date', 'Customer', 'Items Count', 'Total', 'Method', 'Status']);
     
@@ -233,13 +234,13 @@ app.get('/api/products', async (req, res) => {
 
 // Create product
 app.post('/api/products', async (req, res) => {
-  const { sku, name, category, price, cost, stock, type } = req.body;
+  const { sku, name, category, price, cost, stock, type, image } = req.body;
   const businessName = getBusinessName(req);
 
   try {
     const id = `p-${Date.now()}`;
-    await run('INSERT INTO products (id, sku, name, category, price, cost, stock, type, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)',
-      [id, sku, name, category, Number(price), Number(cost), type === 'PHYSICAL' ? Number(stock || 0) : 999, type]);
+    await run('INSERT INTO products (id, sku, name, category, price, cost, stock, type, active, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)',
+      [id, sku, name, category, Number(price), Number(cost), type === 'PHYSICAL' ? Number(stock || 0) : 999, type, image || null]);
 
     // If it's a physical product, also register in inventory
     if (type === 'PHYSICAL') {
@@ -327,13 +328,13 @@ app.get('/api/customers', async (req, res) => {
 
 // Create Customer
 app.post('/api/customers', async (req, res) => {
-  const { name, phone, email } = req.body;
+  const { name, phone, email, image } = req.body;
   const businessName = getBusinessName(req);
 
   try {
     const id = `c-${Date.now()}`;
-    await run('INSERT INTO customers (id, name, phone, email, tier, points, totalSpent, visits) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [id, name, phone, email || '-', 'REGULAR', 0, 0, 0]);
+    await run('INSERT INTO customers (id, name, phone, email, tier, points, totalSpent, visits, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [id, name, phone, email || '-', 'REGULAR', 0, 0, 0, image || null]);
 
     triggerBackgroundSync(businessName);
     res.json({ success: true, id });
@@ -741,7 +742,7 @@ app.get('/api/events', async (req, res) => {
 
 // Create event
 app.post('/api/events', async (req, res) => {
-  const { title, description, start_time, end_time, location, ticket_tiers } = req.body;
+  const { title, description, start_time, end_time, location, ticket_tiers, image } = req.body;
   const businessName = getBusinessName(req);
 
   try {
@@ -749,8 +750,8 @@ app.post('/api/events', async (req, res) => {
     
     await run('BEGIN TRANSACTION');
     
-    await run('INSERT INTO event_details (id, title, description, start_time, end_time, location) VALUES (?, ?, ?, ?, ?, ?)',
-      [eventId, title, description, start_time, end_time, location]);
+    await run('INSERT INTO event_details (id, title, description, start_time, end_time, location, image) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [eventId, title, description, start_time, end_time, location, image || null]);
 
     if (ticket_tiers && ticket_tiers.length > 0) {
       for (const tier of ticket_tiers) {

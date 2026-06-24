@@ -7,7 +7,8 @@ import {
   Crown,
   Eye,
   Award,
-  X
+  X,
+  Upload
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { formatRupiah } from '../data/mockData';
@@ -19,6 +20,7 @@ export default function CustomerManagement() {
 
   // Modal states for adding a customer
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [custImage, setCustImage] = useState('');
   const [newCustomer, setNewCustomer] = useState({
     name: '',
     phone: '',
@@ -132,12 +134,21 @@ export default function CustomerManagement() {
                 <tr key={c.id}>
                   <td>
                     <div className="customer-avatar-identity">
-                      <div 
-                        className="customer-avatar" 
-                        style={{ backgroundColor: avatarColors[i % avatarColors.length] }}
-                      >
-                        {getInitials(c.name)}
-                      </div>
+                      {c.image ? (
+                        <img 
+                          src={c.image} 
+                          alt={c.name} 
+                          className="customer-avatar" 
+                          style={{ objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div 
+                          className="customer-avatar" 
+                          style={{ backgroundColor: avatarColors[i % avatarColors.length] }}
+                        >
+                          {getInitials(c.name)}
+                        </div>
+                      )}
                       <div className="customer-name-wrapper">
                         <span className="font-semibold">{c.name}</span>
                         <span className="customer-id">{c.id}</span>
@@ -168,64 +179,115 @@ export default function CustomerManagement() {
 
       {/* Modal Tambah Pelanggan */}
       {isModalOpen && (
-        <div className="payment-modal-overlay">
-          <div className="payment-modal card animate-scaleUp">
+        <div className="modal-overlay">
+          <div className="modal-card animate-scaleUp">
             <div className="modal-header">
               <h3>Tambah Pelanggan Baru</h3>
-              <button className="modal-close" onClick={() => setIsModalOpen(false)}>
-                <X size={20} />
+              <button className="modal-close" onClick={() => { setIsModalOpen(false); setCustImage(''); }}>
+                <X size={18} />
               </button>
             </div>
             <div className="modal-body">
-              <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
-                <label className="input-label">Nama Lengkap</label>
+              {/* Profile Photo Uploader */}
+              <div className="image-uploader-container">
+                <label className="form-label">Foto Profil Pelanggan</label>
+                <div className="image-uploader-box" onClick={() => document.getElementById('cust-img-file').click()}>
+                  <input
+                    id="cust-img-file"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setCustImage(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                  {custImage ? (
+                    <>
+                      <img src={custImage} alt="Preview" className="image-preview-circle" style={{ borderRadius: '50%' }} />
+                      <div className="image-uploader-info">
+                        <span className="image-uploader-title">Foto Pelanggan Dimuat</span>
+                        <span className="image-uploader-desc">Klik di sini untuk mengganti foto</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="image-uploader-remove"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCustImage('');
+                        }}
+                      >
+                        <X size={12} />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="image-uploader-placeholder">
+                      <Upload size={20} className="image-uploader-icon" />
+                      <span>Klik untuk unggah foto profil pelanggan</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="input-label" htmlFor="cust-name-input">Nama Lengkap</label>
                 <input
+                  id="cust-name-input"
                   type="text"
                   placeholder="Contoh: Rian Hidayat"
                   value={newCustomer.name}
                   onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
-                  className="input-field"
+                  className="input"
                   style={{ width: '100%' }}
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
-                <label className="input-label">Nomor Telepon</label>
+              <div className="form-group">
+                <label className="input-label" htmlFor="cust-phone-input">Nomor Telepon</label>
                 <input
+                  id="cust-phone-input"
                   type="text"
                   placeholder="Contoh: 0812XXXXXXXX"
                   value={newCustomer.phone}
                   onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
-                  className="input-field"
+                  className="input"
                   style={{ width: '100%' }}
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
-                <label className="input-label">Email (Opsional)</label>
+              <div className="form-group">
+                <label className="input-label" htmlFor="cust-email-input">Email (Opsional)</label>
                 <input
+                  id="cust-email-input"
                   type="email"
                   placeholder="Contoh: rian@gmail.com"
                   value={newCustomer.email}
                   onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
-                  className="input-field"
+                  className="input"
                   style={{ width: '100%' }}
                 />
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>
+              <button className="btn btn-secondary" onClick={() => { setIsModalOpen(false); setCustImage(''); }}>
                 Batal
               </button>
               <button
-                className="btn btn-brand"
+                className="btn btn-primary"
                 onClick={() => {
                   if (!newCustomer.name || !newCustomer.phone) {
                     alert('Nama dan Nomor Telepon wajib diisi!');
                     return;
                   }
-                  addCustomer(newCustomer);
+                  addCustomer({ ...newCustomer, image: custImage || null });
                   setIsModalOpen(false);
+                  setCustImage('');
                   setNewCustomer({
                     name: '',
                     phone: '',

@@ -430,17 +430,35 @@ export default function POSCashier() {
               <div className="pos-products-grid">
                 {filteredProducts.map((p) => {
                   const categoryColor = categories.find((c) => c.id === p.category)?.color || 'var(--brand-500)';
+                  const categoryObj = categories.find((c) => c.id === p.category);
                   return (
                     <div key={p.id} className="pos-product-card" onClick={() => addToCart(p)}>
-                      <div className="product-category-indicator" style={{ backgroundColor: categoryColor }}></div>
-                      <div className="product-info-wrap">
-                        <span className="product-sku">{p.sku}</span>
-                        <h4 className="product-name">{p.name}</h4>
+                      <div className="product-card-image-wrap">
+                        <div className="product-category-indicator" style={{ backgroundColor: categoryColor }}></div>
+                        {p.image ? (
+                          <img src={p.image} alt={p.name} className="product-card-img" />
+                        ) : (
+                          <span>{categoryObj?.icon || '☕'}</span>
+                        )}
+                        <span className="product-sku" style={{
+                          position: 'absolute',
+                          bottom: '6px',
+                          left: '8px',
+                          background: 'rgba(15, 23, 42, 0.65)',
+                          color: '#fff',
+                          padding: '2px 6px',
+                          borderRadius: 'var(--radius-sm)',
+                          fontSize: '0.58rem',
+                          fontFamily: 'monospace'
+                        }}>{p.sku}</span>
                       </div>
-                      <div className="product-footer">
-                        <span className="product-price">{formatRupiah(p.price)}</span>
-                        <div className="product-add-badge">
-                          <Plus size={14} />
+                      <div className="product-card-details">
+                        <h4 className="product-card-name">{p.name}</h4>
+                        <div className="product-footer" style={{ marginTop: 'auto', paddingTop: '4px' }}>
+                          <span className="product-price" style={{ fontSize: '0.8rem' }}>{formatRupiah(p.price)}</span>
+                          <div className="product-add-badge" style={{ width: '18px', height: '18px' }}>
+                            <Plus size={12} />
+                          </div>
                         </div>
                       </div>
                     </div>

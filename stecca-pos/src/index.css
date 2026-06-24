@@ -894,3 +894,189 @@ input, select, textarea {
   .app-content { padding: var(--space-4); }
   .page-header { flex-direction: column; align-items: flex-start; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL BEAUTIFUL LIGHT MODALS
+   ═══════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.4); /* Slate dark transparent backdrop */
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-4);
+}
+
+.modal-card {
+  width: 550px;
+  max-width: 100%;
+  background: var(--surface-primary); /* Pure white background */
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-xl), 0 20px 40px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-card.modal-large {
+  width: 750px;
+}
+
+@keyframes modalScaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-default);
+  background: var(--surface-primary);
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  border: none;
+  font-size: 1.4rem;
+  transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--border-default);
+  background: var(--surface-secondary); /* slate-50 light footer background */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   IMAGE UPLOADER STYLING
+   ═══════════════════════════════════════════════════════════════ */
+.image-uploader-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.image-uploader-box {
+  border: 2px dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  cursor: pointer;
+  background: var(--surface-secondary);
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.image-uploader-box:hover {
+  border-color: var(--brand-500);
+  background: var(--brand-50);
+}
+
+.image-uploader-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-tertiary);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.image-uploader-icon {
+  color: var(--brand-500);
+  margin-bottom: 2px;
+}
+
+.image-preview-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  border: 2px solid var(--surface-primary);
+  box-shadow: var(--shadow-md);
+  background: var(--surface-primary);
+  flex-shrink: 0;
+}
+
+.image-uploader-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.image-uploader-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.image-uploader-desc {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.image-uploader-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger-500);
+  border-radius: var(--radius-full);
+  padding: 4px;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.image-uploader-remove:hover {
+  background: var(--danger-500);
+  color: white;
+}
+

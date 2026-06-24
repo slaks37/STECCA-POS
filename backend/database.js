@@ -59,7 +59,8 @@ async function initDatabase() {
       cost REAL NOT NULL,
       stock INTEGER DEFAULT 999,
       type TEXT NOT NULL,
-      active INTEGER DEFAULT 1
+      active INTEGER DEFAULT 1,
+      image TEXT
     )`);
 
     // 3. Stock Items Table (Inventory Raw Materials)
@@ -98,7 +99,8 @@ async function initDatabase() {
       tier TEXT DEFAULT 'REGULAR',
       points INTEGER DEFAULT 0,
       totalSpent REAL DEFAULT 0,
-      visits INTEGER DEFAULT 0
+      visits INTEGER DEFAULT 0,
+      image TEXT
     )`);
 
     // 6. Bookings Table (Reservations)
@@ -179,7 +181,8 @@ async function initDatabase() {
       description TEXT,
       start_time TEXT NOT NULL,
       end_time TEXT NOT NULL,
-      location TEXT
+      location TEXT,
+      image TEXT
     )`);
 
     // 14. Event Ticket Tiers Table
@@ -205,6 +208,22 @@ async function initDatabase() {
       checked_in_time TEXT,
       FOREIGN KEY(ticket_tier_id) REFERENCES event_ticket_tiers(id) ON DELETE CASCADE
     )`);
+
+    // Run migrations to add image columns if they don't exist in existing DB
+    try {
+      await run('ALTER TABLE products ADD COLUMN image TEXT');
+      console.log('Migration check: products.image column added.');
+    } catch (e) {}
+
+    try {
+      await run('ALTER TABLE customers ADD COLUMN image TEXT');
+      console.log('Migration check: customers.image column added.');
+    } catch (e) {}
+
+    try {
+      await run('ALTER TABLE event_details ADD COLUMN image TEXT');
+      console.log('Migration check: event_details.image column added.');
+    } catch (e) {}
 
     console.log('SQLite tables initialized successfully.');
 

@@ -176,7 +176,8 @@ export function AppContextProvider({ children }) {
         cost: Number(newProd.cost),
         stock: newProd.type === 'PHYSICAL' ? Number(newProd.stock || 0) : 999,
         type: newProd.type,
-        active: true
+        active: true,
+        image: newProd.image || null
       };
       setProducts((prev) => [...prev, formattedProd]);
 
@@ -224,7 +225,8 @@ export function AppContextProvider({ children }) {
         tier: 'REGULAR',
         points: 0,
         totalSpent: 0,
-        visits: 0
+        visits: 0,
+        image: newCust.image || null
       };
       setCustomers((prev) => [...prev, formattedCust]);
     }

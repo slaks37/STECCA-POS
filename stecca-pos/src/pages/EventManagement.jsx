@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Calendar, MapPin, Users, Ticket, Plus, Search, Check, 
   CheckCircle2, XCircle, UserPlus, ArrowRight, Clock, QrCode, 
-  Printer, Download, AlertCircle, TrendingUp
+  Printer, Download, AlertCircle, TrendingUp, Upload, X
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import './EventManagement.css';
@@ -30,6 +30,7 @@ export default function EventManagement() {
   const [eventStart, setEventStart] = useState('');
   const [eventEnd, setEventEnd] = useState('');
   const [eventLocation, setEventLocation] = useState('');
+  const [eventImage, setEventImage] = useState('');
   const [ticketTiers, setTicketTiers] = useState([
     { name: 'Regular Seat', price: 25000, quota: 100 },
     { name: 'VIP Area', price: 75000, quota: 30 }
@@ -85,7 +86,8 @@ export default function EventManagement() {
         eventDate: activeEvent?.start_time,
         eventLocation: activeEvent?.location,
         tierName: selectedTier?.name || 'Tiket Masuk',
-        price: selectedTier?.price || 0
+        price: selectedTier?.price || 0,
+        eventImage: activeEvent?.image || null
       });
 
       setIsRegisterModalOpen(false);
@@ -105,11 +107,13 @@ export default function EventManagement() {
       start_time: eventStart.replace('T', ' '),
       end_time: eventEnd.replace('T', ' '),
       location: eventLocation,
-      ticket_tiers: ticketTiers.filter(t => t.name.trim() !== '')
+      ticket_tiers: ticketTiers.filter(t => t.name.trim() !== ''),
+      image: eventImage || null
     };
 
     await addEvent(eventData);
     setIsEventModalOpen(false);
+    setEventImage('');
     
     // Reset form
     setEventTitle('');
@@ -228,9 +232,18 @@ export default function EventManagement() {
                     {isActive && <div className="active-glow-border"></div>}
                     
                     <div className="event-card-main">
-                      <div className="event-meta-icon" style={{ backgroundColor: isActive ? 'var(--brand-500)' : 'var(--surface-elevated)' }}>
-                        <Calendar size={18} style={{ color: isActive ? '#fff' : 'var(--text-secondary)' }} />
-                      </div>
+                      {evt.image ? (
+                        <img 
+                          src={evt.image} 
+                          alt={evt.title} 
+                          className="event-meta-icon"
+                          style={{ objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div className="event-meta-icon" style={{ backgroundColor: isActive ? 'var(--brand-500)' : 'var(--surface-elevated)' }}>
+                          <Calendar size={18} style={{ color: isActive ? '#fff' : 'var(--text-secondary)' }} />
+                        </div>
+                      )}
                       
                       <div className="event-main-info">
                         <h4 className="event-item-title">{evt.title}</h4>
@@ -277,16 +290,20 @@ export default function EventManagement() {
         {/* Right Pane: Guest / Check-in List */}
         <div className="guest-checkin-pane">
           {activeEvent ? (
-            <div className="card pane-details-card">
-              
-              <div className="pane-details-header">
+            <div className="card pane-details-card" style={{ padding: 0, overflow: 'hidden' }}>
+              {activeEvent.image && (
+                <div className="event-banner-wrap" style={{ width: '100%', height: '140px', overflow: 'hidden', borderBottom: '1px solid var(--border-default)' }}>
+                  <img src={activeEvent.image} alt={activeEvent.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              )}
+              <div className="pane-details-header" style={{ padding: 'var(--space-5) var(--space-5) var(--space-4) var(--space-5)' }}>
                 <div>
                   <span className="badge badge-accent text-xs">JADWAL TERPILIH</span>
                   <h3 className="details-event-title mt-1">{activeEvent.title}</h3>
                   <p className="details-event-desc mt-1 text-muted text-xs">{activeEvent.description}</p>
                 </div>
                 
-                <div className="attendance-radial-panel">
+                <div className="attendance-radial-panel" style={{ marginRight: 'var(--space-5)' }}>
                   <div className="radial-content">
                     <span className="radial-val">{totalCheckedIn}/{totalTicketsRegistered}</span>
                     <span className="radial-label">Hadir</span>
@@ -295,7 +312,7 @@ export default function EventManagement() {
               </div>
 
               {/* Guest search and actions bar */}
-              <div className="guest-search-bar mt-4">
+              <div className="guest-search-bar mt-4" style={{ padding: '0 var(--space-5)' }}>
                 <div className="search-wrapper flex-1">
                   <Search size={16} />
                   <input
@@ -313,7 +330,7 @@ export default function EventManagement() {
               </div>
 
               {/* Registrants Table */}
-              <div className="guest-table-wrapper mt-4">
+              <div className="guest-table-wrapper mt-4" style={{ padding: '0 var(--space-5) var(--space-5) var(--space-5)' }}>
                 {filteredGuests.length === 0 ? (
                   <div className="empty-state p-6">
                     <AlertCircle size={28} className="text-muted mb-1" />
@@ -390,6 +407,53 @@ export default function EventManagement() {
             <form onSubmit={handleCreateEvent}>
               <div className="modal-body">
                 
+                {/* Event Banner Uploader */}
+                <div className="image-uploader-container">
+                  <label className="form-label">Banner / Poster Acara</label>
+                  <div className="image-uploader-box" onClick={() => document.getElementById('evt-img-file').click()}>
+                    <input
+                      id="evt-img-file"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setEventImage(reader.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      style={{ display: 'none' }}
+                    />
+                    {eventImage ? (
+                      <>
+                        <img src={eventImage} alt="Preview" className="image-preview-circle" style={{ width: '120px', height: '68px', borderRadius: 'var(--radius-md)' }} />
+                        <div className="image-uploader-info">
+                          <span className="image-uploader-title">Banner Acara Dimuat</span>
+                          <span className="image-uploader-desc">Klik di sini untuk mengganti gambar</span>
+                        </div>
+                        <button
+                          type="button"
+                          className="image-uploader-remove"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEventImage('');
+                          }}
+                        >
+                          <X size={12} />
+                        </button>
+                      </>
+                    ) : (
+                      <div className="image-uploader-placeholder">
+                        <Upload size={20} className="image-uploader-icon" />
+                        <span>Klik untuk unggah banner/poster acara</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <div className="grid-2">
                   <div className="form-group">
                     <label className="form-label" htmlFor="evt-title">Nama Event</label>
@@ -617,7 +681,11 @@ export default function EventManagement() {
               
               {/* Premium Designed E-Ticket Card */}
               <div className="ticket-visual-design mt-2">
-                <div className="ticket-header-decor" style={{ background: 'linear-gradient(90deg, var(--brand-600) 0%, var(--brand-400) 100%)' }}>
+                <div className="ticket-header-decor" style={{ 
+                  background: newlyRegisteredTicket.eventImage 
+                    ? `linear-gradient(rgba(92, 62, 255, 0.8), rgba(92, 62, 255, 0.95)), url(${newlyRegisteredTicket.eventImage}) center/cover`
+                    : 'linear-gradient(90deg, var(--brand-600) 0%, var(--brand-400) 100%)' 
+                }}>
                   <div className="ticket-brand-logo">STECCA EVENT PASS</div>
                   <span className="ticket-tier-badge">{newlyRegisteredTicket.tierName.toUpperCase()}</span>
                 </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Mail, Phone, CalendarRange, Plus, Edit2, ShieldAlert, Award, Clock } from 'lucide-react';
+import { Users, Mail, Phone, CalendarRange, Plus, Edit2, ShieldAlert, Award, Clock, Upload, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { formatRupiah } from '../data/mockData';
 import './EmployeeManagement.css';
@@ -19,6 +19,7 @@ export default function EmployeeManagement() {
   const [empRole, setEmpRole] = useState('Kasir');
   const [empSalary, setEmpSalary] = useState(4000000);
   const [empShift, setEmpShift] = useState('Pagi (08:00 - 16:00)');
+  const [empImage, setEmpImage] = useState('');
 
   // Form State: Edit Employee
   const [editRole, setEditRole] = useState('');
@@ -36,10 +37,12 @@ export default function EmployeeManagement() {
       phone: empPhone,
       role: empRole,
       salary: empSalary,
-      shift: empShift
+      shift: empShift,
+      image: empImage || null
     });
 
     setIsAddModalOpen(false);
+    setEmpImage('');
 
     // Reset fields
     setEmpName('');
@@ -133,9 +136,18 @@ export default function EmployeeManagement() {
           <div key={emp.id} className="card employee-item-card">
             <div className="emp-card-header justify-between">
               <div className="emp-avatar-section">
-                <div className="emp-avatar">
-                  {emp.name.split(' ').map(n=>n[0]).join('')}
-                </div>
+                {emp.image ? (
+                  <img 
+                    src={emp.image} 
+                    alt={emp.name} 
+                    className="emp-avatar" 
+                    style={{ objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div className="emp-avatar">
+                    {emp.name.split(' ').map(n=>n[0]).join('')}
+                  </div>
+                )}
                 <div>
                   <h4 className="emp-name-title">{emp.name}</h4>
                   <span className="emp-role-tag">{emp.role}</span>
@@ -188,6 +200,53 @@ export default function EmployeeManagement() {
             <form onSubmit={handleCreateEmployee}>
               <div className="modal-body">
                 
+                {/* Profile Photo Uploader */}
+                <div className="image-uploader-container">
+                  <label className="form-label">Foto Profil Pegawai</label>
+                  <div className="image-uploader-box" onClick={() => document.getElementById('emp-img-file').click()}>
+                    <input
+                      id="emp-img-file"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setEmpImage(reader.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      style={{ display: 'none' }}
+                    />
+                    {empImage ? (
+                      <>
+                        <img src={empImage} alt="Preview" className="image-preview-circle" style={{ borderRadius: '50%' }} />
+                        <div className="image-uploader-info">
+                          <span className="image-uploader-title">Foto Pegawai Dimuat</span>
+                          <span className="image-uploader-desc">Klik di sini untuk mengganti foto</span>
+                        </div>
+                        <button
+                          type="button"
+                          className="image-uploader-remove"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEmpImage('');
+                          }}
+                        >
+                          <X size={12} />
+                        </button>
+                      </>
+                    ) : (
+                      <div className="image-uploader-placeholder">
+                        <Upload size={20} className="image-uploader-icon" />
+                        <span>Klik untuk unggah foto profil pegawai</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <div className="form-group">
                   <label className="form-label" htmlFor="emp-name-input">Nama Lengkap</label>
                   <input

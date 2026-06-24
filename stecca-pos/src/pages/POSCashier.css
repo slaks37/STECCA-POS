@@ -87,23 +87,20 @@
 .pos-product-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: var(--surface-default);
-  border: 1px solid var(--border-muted);
+  background: var(--surface-primary);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
-  padding: var(--space-3);
-  height: 125px;
+  height: 180px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: all var(--transition-fast) ease-out;
+  transition: all var(--transition-base);
 }
 
 .pos-product-card:hover {
   transform: translateY(-2px);
   border-color: var(--brand-400);
   box-shadow: var(--shadow-md);
-  background: var(--surface-elevated);
 }
 
 .product-category-indicator {
@@ -112,38 +109,53 @@
   left: 0;
   width: 100%;
   height: 4px;
+  z-index: 5;
 }
 
-.product-info-wrap {
+.product-card-image-wrap {
+  width: 100%;
+  height: 95px;
+  background: var(--surface-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-default);
+  position: relative;
+  font-size: 2.2rem;
+}
+
+.product-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card-details {
+  padding: var(--space-2) var(--space-3);
   display: flex;
   flex-direction: column;
-  margin-top: var(--space-1);
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
 }
 
-.product-sku {
-  font-size: 0.65rem;
-  color: var(--text-tertiary);
-  font-weight: 500;
-  font-family: monospace;
-}
-
-.product-name {
-  font-size: 0.82rem;
+.product-card-name {
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-top: 2px;
-  line-height: 1.25;
+  line-height: 1.35;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-top: 1px;
 }
 
 .product-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: var(--space-2);
 }
 
 .product-price {
@@ -156,8 +168,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
   border-radius: var(--radius-sm);
   background: rgba(99, 102, 241, 0.1);
   color: var(--brand-400);

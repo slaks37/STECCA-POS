@@ -24,6 +24,7 @@ export default function ProductManagement() {
 
   // Modal states for adding a product
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imgBase64, setImgBase64] = useState('');
   const [newProduct, setNewProduct] = useState({
     sku: '',
     name: '',
@@ -161,8 +162,38 @@ export default function ProductManagement() {
                   <tr key={p.id}>
                     <td className="font-mono text-xs">{p.sku}</td>
                     <td>
-                      <div className="product-table-identity">
-                        <span className="product-category-bullet" style={{ backgroundColor: categoryObj?.color || 'var(--brand-500)' }}></span>
+                      <div className="product-table-identity" style={{ gap: 'var(--space-3)' }}>
+                        {p.image ? (
+                          <img 
+                            src={p.image} 
+                            alt={p.name} 
+                            style={{ 
+                              width: '34px', 
+                              height: '34px', 
+                              borderRadius: 'var(--radius-md)', 
+                              objectFit: 'cover',
+                              border: '1px solid var(--border-default)',
+                              flexShrink: 0
+                            }} 
+                          />
+                        ) : (
+                          <div 
+                            style={{ 
+                              width: '34px', 
+                              height: '34px', 
+                              borderRadius: 'var(--radius-md)', 
+                              background: 'var(--surface-secondary)', 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center',
+                              border: '1px solid var(--border-default)',
+                              fontSize: '1rem',
+                              flexShrink: 0
+                            }}
+                          >
+                            {categoryObj?.icon || '📦'}
+                          </div>
+                        )}
                         <span className="font-semibold">{p.name}</span>
                       </div>
                     </td>
@@ -213,47 +244,97 @@ export default function ProductManagement() {
 
       {/* Modal Tambah Produk */}
       {isModalOpen && (
-        <div className="payment-modal-overlay">
-          <div className="payment-modal card animate-scaleUp">
+        <div className="modal-overlay">
+          <div className="modal-card animate-scaleUp">
             <div className="modal-header">
               <h3>Tambah Produk Baru</h3>
-              <button className="modal-close" onClick={() => setIsModalOpen(false)}>
-                <X size={20} />
+              <button className="modal-close" onClick={() => { setIsModalOpen(false); setImgBase64(''); }}>
+                <X size={18} />
               </button>
             </div>
             <div className="modal-body">
-              <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
-                <label className="input-label">SKU Produk</label>
+              {/* Image Uploader */}
+              <div className="image-uploader-container">
+                <label className="input-label">Foto Produk</label>
+                <div className="image-uploader-box" onClick={() => document.getElementById('prod-img-file').click()}>
+                  <input
+                    id="prod-img-file"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setImgBase64(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                  {imgBase64 ? (
+                    <>
+                      <img src={imgBase64} alt="Preview" className="image-preview-circle" />
+                      <div className="image-uploader-info">
+                        <span className="image-uploader-title">Foto Produk Dimuat</span>
+                        <span className="image-uploader-desc">Klik di sini untuk mengganti foto</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="image-uploader-remove"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setImgBase64('');
+                        }}
+                      >
+                        <X size={12} />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="image-uploader-placeholder">
+                      <Upload size={20} className="image-uploader-icon" />
+                      <span>Klik untuk unggah foto produk</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="input-label" htmlFor="prod-sku">SKU Produk</label>
                 <input
+                  id="prod-sku"
                   type="text"
                   placeholder="Contoh: KSP-016"
                   value={newProduct.sku}
                   onChange={(e) => setNewProduct({ ...newProduct, sku: e.target.value })}
-                  className="input-field"
+                  className="input"
                   style={{ width: '100%' }}
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
-                <label className="input-label">Nama Produk</label>
+              <div className="form-group">
+                <label className="input-label" htmlFor="prod-name">Nama Produk</label>
                 <input
+                  id="prod-name"
                   type="text"
                   placeholder="Contoh: Kopi Caramel Latte"
                   value={newProduct.name}
                   onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                  className="input-field"
+                  className="input"
                   style={{ width: '100%' }}
                 />
               </div>
 
-              <div className="grid-2" style={{ marginBottom: 'var(--space-3)' }}>
+              <div className="grid-2">
                 <div className="form-group">
-                  <label className="input-label">Kategori</label>
+                  <label className="input-label" htmlFor="prod-category">Kategori</label>
                   <select
+                    id="prod-category"
                     value={newProduct.category}
                     onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                    className="select-field"
-                    style={{ width: '100%', height: 'var(--input-height)' }}
+                    className="input"
+                    style={{ width: '100%', height: '42px', padding: '8px 12px' }}
                   >
                     {categories.filter(c => c.id !== 'cat-06').map(c => (
                       <option key={c.id} value={c.id}>{c.name}</option>
@@ -262,12 +343,13 @@ export default function ProductManagement() {
                 </div>
 
                 <div className="form-group">
-                  <label className="input-label">Tipe Produk</label>
+                  <label className="input-label" htmlFor="prod-type">Tipe Produk</label>
                   <select
+                    id="prod-type"
                     value={newProduct.type}
                     onChange={(e) => setNewProduct({ ...newProduct, type: e.target.value })}
-                    className="select-field"
-                    style={{ width: '100%', height: 'var(--input-height)' }}
+                    className="input"
+                    style={{ width: '100%', height: '42px', padding: '8px 12px' }}
                   >
                     <option value="PHYSICAL">Fisik (Physical)</option>
                     <option value="SERVICE">Layanan (Service)</option>
@@ -276,58 +358,62 @@ export default function ProductManagement() {
                 </div>
               </div>
 
-              <div className="grid-3" style={{ marginBottom: 'var(--space-3)' }}>
+              <div className="grid-3">
                 <div className="form-group">
-                  <label className="input-label">Harga Jual</label>
+                  <label className="input-label" htmlFor="prod-price">Harga Jual</label>
                   <input
+                    id="prod-price"
                     type="number"
                     placeholder="25000"
                     value={newProduct.price}
                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-                    className="input-field"
+                    className="input"
                     style={{ width: '100%' }}
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="input-label">HPP (Beli)</label>
+                  <label className="input-label" htmlFor="prod-cost">HPP (Beli)</label>
                   <input
+                    id="prod-cost"
                     type="number"
                     placeholder="8000"
                     value={newProduct.cost}
                     onChange={(e) => setNewProduct({ ...newProduct, cost: e.target.value })}
-                    className="input-field"
+                    className="input"
                     style={{ width: '100%' }}
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="input-label">Stok Awal</label>
+                  <label className="input-label" htmlFor="prod-stock">Stok Awal</label>
                   <input
+                    id="prod-stock"
                     type="number"
                     placeholder="100"
                     disabled={newProduct.type !== 'PHYSICAL'}
                     value={newProduct.stock}
                     onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
-                    className="input-field"
+                    className="input"
                     style={{ width: '100%' }}
                   />
                 </div>
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>
+              <button className="btn btn-secondary" onClick={() => { setIsModalOpen(false); setImgBase64(''); }}>
                 Batal
               </button>
               <button
-                className="btn btn-brand"
+                className="btn btn-primary"
                 onClick={() => {
                   if (!newProduct.sku || !newProduct.name || !newProduct.price || !newProduct.cost) {
                     alert('Harap lengkapi semua field!');
                     return;
                   }
-                  addProduct(newProduct);
+                  addProduct({ ...newProduct, image: imgBase64 || null });
                   setIsModalOpen(false);
+                  setImgBase64('');
                   setNewProduct({
                     sku: '',
                     name: '',
