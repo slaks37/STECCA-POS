@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowRight, Shield, Zap, LayoutDashboard, Database, Repeat, 
-  Store, LineChart, Package, Users, Briefcase, CalendarClock,
-  TrendingUp, CreditCard, ChevronDown, Check, Globe, Layout, Smartphone
+  ArrowRight, LayoutDashboard, Database, Repeat, 
+  Store, LineChart, Package, Users, CalendarClock,
+  CreditCard, ChevronDown, Check, Globe
 } from 'lucide-react';
 import './LandingPage.css';
 

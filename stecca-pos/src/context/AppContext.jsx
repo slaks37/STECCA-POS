@@ -199,6 +199,41 @@ export function AppContextProvider({ children }) {
     }
   };
 
+  // Update existing product
+  const updateProduct = async (id, updatedProd) => {
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-business-name': 'Cabang Menteng'
+        },
+        body: JSON.stringify(updatedProd)
+      });
+      if (res.ok) {
+        await fetchInitialData();
+      } else {
+        throw new Error('API return error');
+      }
+    } catch (err) {
+      console.error('Error updating product, falling back to local state:', err.message);
+      setProducts((prev) => prev.map(p => p.id === id ? { ...p, ...updatedProd, price: Number(updatedProd.price), cost: Number(updatedProd.cost), stock: Number(updatedProd.stock) } : p));
+    }
+  };
+
+  // Delete product
+  const deleteProduct = async (id) => {
+    try {
+      await fetch(`/api/products/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-business-name': 'Cabang Menteng' }
+      });
+    } catch (err) {
+      console.error('API error on delete product, proceeding locally', err);
+    }
+    setProducts((prev) => prev.filter(p => p.id !== id));
+  };
+
   // Add new customer
   const addCustomer = async (newCust) => {
     try {
@@ -800,6 +835,8 @@ export function AppContextProvider({ children }) {
         activeIndustry,
         updateActiveIndustry,
         addProduct,
+        updateProduct,
+        deleteProduct,
         addCustomer,
         addBooking,
         updateBookingStatus,

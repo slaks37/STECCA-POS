@@ -4,24 +4,26 @@ import {
   Plus,
   Upload,
   Edit,
-  MoreHorizontal,
   CheckCircle2,
   XCircle,
-  X
+  X,
+  Trash2
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { categories, formatRupiah } from '../data/mockData';
 import './ProductManagement.css';
 
 export default function ProductManagement() {
-  const { products, addProduct } = useApp();
+  const { products, addProduct, updateProduct, deleteProduct } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Semua');
   const [typeFilter, setTypeFilter] = useState('Semua');
   const [statusFilter, setStatusFilter] = useState('Semua'); // 'Semua', 'Aktif', 'Nonaktif'
 
-  // Modal states for adding a product
+  // Modal states for adding/editing a product
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState('add'); // 'add' | 'edit'
+  const [selectedProductId, setSelectedProductId] = useState(null);
   const [imgBase64, setImgBase64] = useState('');
   const [newProduct, setNewProduct] = useState({
     sku: '',
@@ -72,7 +74,21 @@ export default function ProductManagement() {
             <Upload size={16} />
             <span>Import CSV</span>
           </button>
-          <button className="btn btn-brand" onClick={() => setIsModalOpen(true)}>
+          <button className="btn btn-brand" onClick={() => {
+            setModalMode('add');
+            setSelectedProductId(null);
+            setImgBase64('');
+            setNewProduct({
+              sku: '',
+              name: '',
+              category: 'cat-01',
+              price: '',
+              cost: '',
+              stock: '',
+              type: 'PHYSICAL'
+            });
+            setIsModalOpen(true);
+          }}>
             <Plus size={16} />
             <span>Tambah Produk</span>
           </button>
@@ -221,11 +237,37 @@ export default function ProductManagement() {
                     </td>
                     <td className="text-center">
                       <div className="action-buttons-wrapper">
-                        <button className="action-icon-btn hover-brand" title="Edit">
+                        <button 
+                          className="action-icon-btn hover-brand" 
+                          title="Edit"
+                          onClick={() => {
+                            setModalMode('edit');
+                            setSelectedProductId(p.id);
+                            setImgBase64(p.image || '');
+                            setNewProduct({
+                              sku: p.sku,
+                              name: p.name,
+                              category: p.category,
+                              price: p.price,
+                              cost: p.cost,
+                              stock: p.stock,
+                              type: p.type
+                            });
+                            setIsModalOpen(true);
+                          }}
+                        >
                           <Edit size={14} />
                         </button>
-                        <button className="action-icon-btn hover-neutral">
-                          <MoreHorizontal size={14} />
+                        <button 
+                          className="action-icon-btn hover-danger" 
+                          title="Hapus"
+                          onClick={() => {
+                            if (window.confirm('Hapus produk ini?')) {
+                              deleteProduct(p.id);
+                            }
+                          }}
+                        >
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </td>
@@ -240,12 +282,12 @@ export default function ProductManagement() {
         </div>
       </div>
 
-      {/* Modal Tambah Produk */}
+      {/* Modal Tambah/Edit Produk */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-card animate-scaleUp">
             <div className="modal-header">
-              <h3>Tambah Produk Baru</h3>
+              <h3>{modalMode === 'add' ? 'Tambah Produk Baru' : 'Sunting Produk'}</h3>
               <button className="modal-close" onClick={() => { setIsModalOpen(false); setImgBase64(''); }}>
                 <X size={18} />
               </button>
@@ -409,7 +451,13 @@ export default function ProductManagement() {
                     alert('Harap lengkapi semua field!');
                     return;
                   }
-                  addProduct({ ...newProduct, image: imgBase64 || null });
+                  
+                  if (modalMode === 'add') {
+                    addProduct({ ...newProduct, image: imgBase64 || null });
+                  } else {
+                    updateProduct(selectedProductId, { ...newProduct, image: imgBase64 || null });
+                  }
+                  
                   setIsModalOpen(false);
                   setImgBase64('');
                   setNewProduct({
@@ -423,7 +471,7 @@ export default function ProductManagement() {
                   });
                 }}
               >
-                Simpan Produk
+                {modalMode === 'add' ? 'Simpan Produk' : 'Simpan Perubahan'}
               </button>
             </div>
           </div>
