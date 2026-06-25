@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import {
   LayoutDashboard, ShoppingCart, Package, BarChart3,
   Users, Warehouse, Settings, Bell, Search, ChevronDown,
@@ -20,11 +20,12 @@ import EventManagement from './pages/EventManagement';
 import BranchManagement from './pages/BranchManagement';
 import EmployeeManagement from './pages/EmployeeManagement';
 import Login from './pages/Login';
+import LandingPage from './pages/LandingPage';
 import './App.css';
 
 const navItems = [
   { section: 'UTAMA' },
-  { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { path: '/pos', icon: ShoppingCart, label: 'Kasir POS' },
   { path: '/bookings', icon: CalendarDays, label: 'Booking & Reservasi' },
   { section: 'MANAJEMEN' },
@@ -229,7 +230,7 @@ function Header() {
 
 function getPageTitle(path) {
   const titles = {
-    '/': 'Dashboard',
+    '/dashboard': 'Dashboard',
     '/pos': 'Kasir POS',
     '/bookings': 'Booking & Reservasi',
     '/products': 'Manajemen Produk',
@@ -248,33 +249,38 @@ function getPageTitle(path) {
 function App() {
   const { isLoggedIn } = useApp();
 
-  if (!isLoggedIn) {
-    return <Login />;
-  }
-
   return (
-    <div className="app-layout">
-      <Sidebar />
-      <main className="app-main">
-        <Header />
-        <div className="app-content">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/pos" element={<POSCashier />} />
-            <Route path="/bookings" element={<Bookings />} />
-            <Route path="/products" element={<ProductManagement />} />
-            <Route path="/stock" element={<StockManagement />} />
-            <Route path="/customers" element={<CustomerManagement />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/cms" element={<CMSManager />} />
-            <Route path="/events" element={<EventManagement />} />
-            <Route path="/branches" element={<BranchManagement />} />
-            <Route path="/employees" element={<EmployeeManagement />} />
-          </Routes>
-        </div>
-      </main>
-    </div>
+    <Routes>
+      <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <LandingPage />} />
+      <Route path="/login" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />} />
+      
+      <Route path="/*" element={
+        isLoggedIn ? (
+          <div className="app-layout">
+            <Sidebar />
+            <main className="app-main">
+              <Header />
+              <div className="app-content">
+                <Routes>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/pos" element={<POSCashier />} />
+                  <Route path="/bookings" element={<Bookings />} />
+                  <Route path="/products" element={<ProductManagement />} />
+                  <Route path="/stock" element={<StockManagement />} />
+                  <Route path="/customers" element={<CustomerManagement />} />
+                  <Route path="/reports" element={<Reports />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                  <Route path="/cms" element={<CMSManager />} />
+                  <Route path="/events" element={<EventManagement />} />
+                  <Route path="/branches" element={<BranchManagement />} />
+                  <Route path="/employees" element={<EmployeeManagement />} />
+                </Routes>
+              </div>
+            </main>
+          </div>
+        ) : <Navigate to="/" />
+      } />
+    </Routes>
   );
 }
 
